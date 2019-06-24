@@ -1,0 +1,3 @@
+[submodule "redoc-build/redoc"]
+	path = redoc-build/redoc
+	url = https://github.com/jaredly/redoc

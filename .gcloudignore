@@ -1,0 +1,10 @@
+.git
+.gcloudignore
+.gitignore
+.gitmodules
+
+redoc-build
+
+#!include:.gitignore
+
+

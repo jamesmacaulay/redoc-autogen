@@ -1,0 +1,15 @@
+# gcloud builds submit --config cloudbuild.yaml . --substitutions=_REPO_URL="https://github.com/SentiaAnalytics/bs-css.git",_PACKAGE_NAME="bs-css",_BRANCH_OR_TAG="v8.0.4",_TARGET_BUCKET="reasonml-package-docs"
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', '--branch', '$_BRANCH_OR_TAG', '--depth', '1', '--shallow-submodules', '$_REPO_URL', 'package']
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'package'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+  dir: 'package'
+- name: 'gcr.io/redoc-autogen/redoc'
+  args: ['--root', 'package', '--target', 'docs', '--name', '$_PACKAGE_NAME']
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['-m', 'cp', '-r', '.', 'gs://${_TARGET_BUCKET}/${_PACKAGE_NAME}/${_BRANCH_OR_TAG}']
+  dir: 'docs'
